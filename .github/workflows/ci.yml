@@ -17,6 +17,7 @@ jobs:
           install: git mingw-w64-ucrt-x86_64-gcc
 
       - name: Compile
+        shell: msys2 {0}
         run: g++ -fdiagnostics-color=always -g $(find ./src -type f -iregex ".*\\.cpp")
 
   compile-ubuntu:
