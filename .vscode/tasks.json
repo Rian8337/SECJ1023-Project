@@ -1,0 +1,29 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++ build",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "$(find",
+                "${workspaceFolder}/src",
+                "-type",
+                "f",
+                "-iregex",
+                "'.*\\.cpp')"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Builds all *.cpp files in the source directory."
+        }
+    ],
+    "version": "2.0.0"
+}
