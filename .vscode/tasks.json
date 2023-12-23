@@ -12,7 +12,9 @@
                 "-type",
                 "f",
                 "-iregex",
-                "'.*\\.cpp')"
+                "'.*\\.cpp')",
+                "-o",
+                "program.out"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -35,7 +37,9 @@
                 "'${workspaceFolder}/src'",
                 "-Filter",
                 "'*.cpp'",
-                "-Recurse).FullName)"
+                "-Recurse).FullName)",
+                "-o",
+                "program.exe"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -58,7 +62,9 @@
                 "-type",
                 "f",
                 "-iregex",
-                "'.*\\.cpp')"
+                "'.*\\.cpp')",
+                "-o",
+                "program.out"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
