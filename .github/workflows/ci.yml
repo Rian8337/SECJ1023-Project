@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup compiler
-        run: brew install mingw-w64
+        run: brew install gcc
 
       - name: Compile
         run: g++ -fdiagnostics-color=always -g $(find ./src -type f -iregex ".*\\.cpp")
