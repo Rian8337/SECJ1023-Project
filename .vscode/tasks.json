@@ -2,7 +2,7 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: g++ build",
+            "label": "C/C++: g++ build (Linux)",
             "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",
@@ -19,11 +19,33 @@
             },
             "problemMatcher": ["$gcc"],
             "group": {
-                "kind": "build",
-                "isDefault": true
+                "kind": "build"
             },
             "detail": "Builds all *.cpp files in the source directory."
-        }
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++ build (Windows)",
+            "command": " g++",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "$(find",
+                "${workspaceFolder}/src",
+                "-type",
+                "f",
+                "-iregex",
+                "'.*\\.cpp')"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build"
+            },
+            "detail": "Builds all *.cpp files in the source directory."
+        },
     ],
     "version": "2.0.0"
 }
