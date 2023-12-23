@@ -6,6 +6,9 @@
 
 using namespace std;
 
+/**
+ * Utilities for the `string` class.
+*/
 namespace StringUtils {
 /**
  * Converts a string to lowercase.
