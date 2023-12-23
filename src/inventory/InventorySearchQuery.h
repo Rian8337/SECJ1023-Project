@@ -32,7 +32,7 @@ class InventorySearchQuery {
     /**
      * The query of this `InventorySearchQuery`.
     */
-    void setQuery(string query);
+    void setQuery(const string &query);
 
     /**
      * The sorting method of this `InventorySearchQuery`.

@@ -17,7 +17,7 @@ class Item {
   public:
     Item();
     Item(size_t id);
-    Item(string name, string description, ItemType type, size_t stock,
+    Item(const string &name, const string &description, ItemType type, size_t stock,
          float price);
     Item(const Item &copy);
 

@@ -21,7 +21,7 @@ InventorySearchQuery::InventorySearchQuery() {
 InventorySearchQuery::~InventorySearchQuery() { delete[] itemTypes; }
 
 string InventorySearchQuery::getQuery() const { return query; }
-void InventorySearchQuery::setQuery(string query) { this->query = query; }
+void InventorySearchQuery::setQuery(const string &query) { this->query = query; }
 
 ItemSortMethod InventorySearchQuery::getSortMethod() const {
     return sortMethod;

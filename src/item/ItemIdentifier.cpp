@@ -23,7 +23,7 @@ ItemIdentifier::ItemIdentifier(size_t id) {
     type = ItemType::none;
 }
 
-ItemIdentifier::ItemIdentifier(string name, string description, ItemType type) {
+ItemIdentifier::ItemIdentifier(const string &name, const string &description, ItemType type) {
     id = ++incrementalId;
     this->name = name;
     this->description = description;
@@ -41,10 +41,10 @@ size_t ItemIdentifier::getID() const { return id; }
 void ItemIdentifier::setID(size_t id) { this->id = id; }
 
 string ItemIdentifier::getName() const { return name; }
-void ItemIdentifier::setName(string name) { this->name = name; }
+void ItemIdentifier::setName(const string &name) { this->name = name; }
 
 string ItemIdentifier::getDescription() const { return description; }
-void ItemIdentifier::setDescription(string description) {
+void ItemIdentifier::setDescription(const string &description) {
     this->description = description;
 }
 

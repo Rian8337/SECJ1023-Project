@@ -20,7 +20,7 @@ Item::Item(size_t id) {
     price = 0;
 };
 
-Item::Item(string name, string description, ItemType type, size_t stock,
+Item::Item(const string &name, const string &description, ItemType type, size_t stock,
            float price) {
     identifier = new ItemIdentifier(name, description, type);
     this->stock = stock;

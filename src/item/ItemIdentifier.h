@@ -22,7 +22,7 @@ class ItemIdentifier {
 
   public:
     ItemIdentifier();
-    ItemIdentifier(string name, string description, ItemType type);
+    ItemIdentifier(const string &name, const string &description, ItemType type);
     ItemIdentifier(const ItemIdentifier &copy);
 
     /**
@@ -50,7 +50,7 @@ class ItemIdentifier {
     /**
      * The name of the `Item` holding this `ItemIdentifier`.
     */
-    void setName(string name);
+    void setName(const string &name);
 
     /**
      * The description of the `Item` holding this `ItemIdentifier`.
@@ -60,7 +60,7 @@ class ItemIdentifier {
     /**
      * The description of the `Item` holding this `ItemIdentifier`.
     */
-    void setDescription(string description);
+    void setDescription(const string &description);
 
     /**
      * The type of the `Item` holding this `ItemIdentifier`.
