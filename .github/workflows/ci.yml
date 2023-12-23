@@ -13,7 +13,7 @@ jobs:
         uses: egor-tensin/setup-mingw@v2
 
       - name: Compile
-        run: g++ -fdiagnostics-color=always -g $(find src -type f -iregex '.*\\.cpp')
+        run: g++ -fdiagnostics-color=always -g $(find ./src -type f -iregex '.*\\.cpp')
 
   compile-ubuntu:
     name: Compile (Ubuntu)
@@ -26,4 +26,4 @@ jobs:
         run: sudo apt install -y build-essential
 
       - name: Compile
-        run: g++ -fdiagnostics-color=always -g $(find src -type f -iregex '.*\\.cpp')
+        run: g++ -fdiagnostics-color=always -g $(find ./src -type f -iregex '.*\\.cpp')
