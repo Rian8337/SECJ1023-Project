@@ -24,18 +24,18 @@
             "detail": "Builds all *.cpp files in the source directory."
         },
         {
-            "type": "cppbuild",
+            "type": "shell",
             "label": "C/C++: g++ build (Windows)",
-            "command": " g++",
+            "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "$(find",
-                "${workspaceFolder}/src",
-                "-type",
-                "f",
-                "-iregex",
-                "'.*\\.cpp')"
+                "$((Get-ChildItem",
+                "-Path",
+                "'${workspaceFolder}/src'",
+                "-Filter",
+                "'*.cpp'",
+                "-Recurse).FullName)"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
