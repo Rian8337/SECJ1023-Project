@@ -67,7 +67,7 @@ InventoryBackup InventoryBackup::readBackup(const string &fileName) {
         item->setStock(stoul(extractDataFromLine(line)));
         item->setPrice(stof(extractDataFromLine(line)));
 
-        addElement(backup.items, item, backup.numItems, itemSize, false);
+        addElement(backup.items, item, backup.numItems, itemSize);
 
         highestId = max(identifier->getID(), highestId);
     }
