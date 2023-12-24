@@ -146,6 +146,10 @@ void addElement(T *arr, const T &element, size_t &size, size_t &capacity,
 */
 template <typename T>
 void removeAtIndex(T *arr, const size_t index, size_t &size) {
+    if (size == 0) {
+        return;
+    }
+
     --size;
 
     // Offset the array to make it seem like the item is removed from the array.
@@ -164,15 +168,19 @@ void removeAtIndex(T *arr, const size_t index, size_t &size) {
 */
 template <typename T>
 bool removeElement(T *arr, const T &element, size_t &size) {
-    for (size_t i = 0; i < size; ++i) {
-        if (arr[i] == element) {
-            removeAtIndex(arr, i, size);
-
-            return true;
-        }
+    if (size == 0) {
+        return false;
     }
 
-    return false;
+    size_t idx = binarySearch(arr, element, 0, size - 1);
+
+    if (idx < size && arr[idx] != element) {
+        return false;
+    }
+
+    removeAtIndex(arr, idx, size);
+
+    return true;
 }
 
 /**
