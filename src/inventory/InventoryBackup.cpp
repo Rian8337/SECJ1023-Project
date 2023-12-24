@@ -26,7 +26,7 @@ InventoryBackup::~InventoryBackup() {
 }
 
 InventoryBackup InventoryBackup::readBackup(const string &fileName) {
-    string dir = "../backups/";
+    string dir = "./backups/";
     dir += fileName;
 
     ifstream file(dir);
@@ -99,7 +99,7 @@ string InventoryBackup::getFilename() const {
 }
 
 bool InventoryBackup::saveToFile() {
-    string dir = "../backups/";
+    string dir = "./backups/";
     dir += getFilename();
 
     ofstream file(dir);
