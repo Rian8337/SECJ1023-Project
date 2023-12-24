@@ -126,7 +126,7 @@ void addAtIndex(T *arr, const T &element, size_t index, size_t &size,
 template <typename T>
 void addElement(T *arr, const T &element, size_t &size, size_t &capacity,
                 const bool ensureUniqueness = false) {
-    if (ensureUniqueness) {
+    if (size > 0 && ensureUniqueness) {
         size_t idx = binarySearch(arr, element, 0, size - 1);
 
         if (idx < size && arr[idx] == element) {
