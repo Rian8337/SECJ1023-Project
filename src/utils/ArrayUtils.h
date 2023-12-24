@@ -36,6 +36,52 @@ template <typename T> void resizeArray(T *arr, size_t &size) {
 }
 
 /**
+ * Binary searches an ascendingly-sorted array to find the index of an element.
+ *
+ * @note
+ * The binary search algorithm narrows the index of the element by comparing it against the middle
+ * element of the given range. If the element is on the left side of the range (`left`), the range will be shrunk
+ * to the left side of the array. If the element is on the right side of the range (`right`), the range will be
+ * shrunk to the right side of the array. This operation is repeated until the range becomes invalid
+ * (`left > right`) or the element is found. The binary search algorithm requires the array to be sorted.
+ * This algorithm in particular requires the array to be sorted ascendingly.
+ *
+ * @param arr The array to search on.
+ * @param element The element to search the location for.
+ * @param left The leftmost position in the array in which the search will be performed.
+ * @param right The rightmost position in the array in which the search will be performed.
+ * @returns The index of the element. If the element is not found,
+ * the function will return the index where the element would be.
+*/
+template <typename T> size_t binarySearch(T *arr, const T &element, size_t left, size_t right) {
+    while (left <= right) {
+        // Get the middle point of the range.
+        const size_t mid = left + (right - left) / 2;
+        const T &midElement = arr[mid];
+
+        if (element == midElement) {
+            // Element is found, return the current middle point.
+            return mid;
+        } else if (element > midElement) {
+            // Element is on the right side of the array, move towards the right side of the array.
+            left = mid + 1;
+        } else {
+            // 0 - 1 on an unsigned number will cause an underflow, so we need to avoid that.
+            // This can happen when the array size is 1.
+            if (mid == 0) {
+                return mid;
+            }
+
+            // Element is on the left side of the array, move towards the left side of the array.
+            right = mid - 1;
+        }
+    }
+
+    // The algorithm fails. Return the index where the element would be if it existed.
+    return left;
+}
+
+/**
  * Adds an element at the specified index to the array.
  * 
  * @note
@@ -141,52 +187,6 @@ template <typename T> void reverseArray(T *arr, const size_t size) {
         arr[i] = arr[j];
         arr[j] = temp;
     }
-}
-
-/**
- * Binary searches an ascendingly-sorted array to find the index of an element.
- *
- * @note
- * The binary search algorithm narrows the index of the element by comparing it against the middle
- * element of the given range. If the element is on the left side of the range (`left`), the range will be shrunk
- * to the left side of the array. If the element is on the right side of the range (`right`), the range will be
- * shrunk to the right side of the array. This operation is repeated until the range becomes invalid
- * (`left > right`) or the element is found. The binary search algorithm requires the array to be sorted.
- * This algorithm in particular requires the array to be sorted ascendingly.
- *
- * @param arr The array to search on.
- * @param element The element to search the location for.
- * @param left The leftmost position in the array in which the search will be performed.
- * @param right The rightmost position in the array in which the search will be performed.
- * @returns The index of the element. If the element is not found,
- * the function will return the index where the element would be.
-*/
-template <typename T> size_t binarySearch(T *arr, const T &element, size_t left, size_t right) {
-    while (left <= right) {
-        // Get the middle point of the range.
-        const size_t mid = left + (right - left) / 2;
-        const T &midElement = arr[mid];
-
-        if (element == midElement) {
-            // Element is found, return the current middle point.
-            return mid;
-        } else if (element > midElement) {
-            // Element is on the right side of the array, move towards the right side of the array.
-            left = mid + 1;
-        } else {
-            // 0 - 1 on an unsigned number will cause an underflow, so we need to avoid that.
-            // This can happen when the array size is 1.
-            if (mid == 0) {
-                return mid;
-            }
-
-            // Element is on the left side of the array, move towards the left side of the array.
-            right = mid - 1;
-        }
-    }
-
-    // The algorithm fails. Return the index where the element would be if it existed.
-    return left;
 }
 } // namespace ArrayUtils
 
