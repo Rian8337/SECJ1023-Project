@@ -88,16 +88,19 @@ void InventoryManager::sortItems(Item **items, size_t numItems,
             }
 
             if (comparison == 0) {
+                // "Same" item is found, return the next index for insertion.
                 return mid + 1;
             } else if (comparison > 0) {
+                // The item should be on the right side of the array, move towards it.
                 left = mid + 1;
             } else {
                 // 0 - 1 on an unsigned number will cause an underflow, so we need to avoid that.
-                // This can happen when the array is 1.
+                // This can happen when the array size is 1.
                 if (mid == 0) {
                     return mid + 1;
                 }
 
+                // The item should be on the left side of the array, move towards it.
                 right = mid - 1;
             }
         }
