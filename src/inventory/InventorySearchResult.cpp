@@ -19,7 +19,7 @@ Item **InventorySearchResult::getItems() const { return items; }
 
 ostream &operator<<(ostream &os, const InventorySearchResult &result) {
     os << "Inventory Search Result" << endl
-       << string(24, '-') << endl
+       << string(23, '-') << endl
        << "ID" << '\t' << "Name" << string(50, ' ') << '\t' << "Type"
        << string(16, ' ') << '\t' << "Stock" << '\t' << "Price" << endl;
 
