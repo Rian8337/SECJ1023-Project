@@ -153,7 +153,7 @@ void displayItemDetails(InventoryManager &manager) {
         break;
     }
 
-    cout << *item << endl;
+    cout << *item;
 }
 
 void listItems(const InventoryManager &manager) {

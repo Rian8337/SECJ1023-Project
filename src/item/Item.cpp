@@ -87,7 +87,8 @@ bool Item::operator>(const Item &right) const {
 ostream &operator<<(ostream &os, const Item &item) {
     const ItemIdentifier *identifier = item.getIdentifier();
 
-    os << "Item Information" << string(16, '-') << endl
+    os << "Item Information" << endl
+       << string(16, '-') << endl
        << "Name: " << identifier->getName() << endl
        << "Description: " << identifier->getDescription() << endl
        << "Type: " << itemTypeToString(identifier->getType()) << endl
