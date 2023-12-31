@@ -61,12 +61,12 @@ template <typename T> class DynamicArray {
     /**
      * Gets the reference to the first element of this `DynamicArray`.
     */
-    T &first() { return arr[0]; }
+    T &first() const { return arr[0]; }
 
     /**
      * Gets the reference to the last element of this `DynamicArray`.
     */
-    T &last() { return arr[_size - 1]; }
+    T &last() const { return arr[_size - 1]; }
 
     /**
      * Prepends an element into this `DynamicArray`.
