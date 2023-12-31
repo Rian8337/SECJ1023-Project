@@ -260,11 +260,11 @@ template <typename T> class DynamicArray {
     T &operator[](const uint32_t idx) const { return arr[idx]; }
     T &operator[](const uint16_t idx) const { return arr[idx]; }
 
-    Iterator<T> begin() { return Iterator(&arr[0]); }
-    Iterator<T> end() { return Iterator(&arr[_size]); }
+    Iterator<T> begin() { return Iterator<T>(&arr[0]); }
+    Iterator<T> end() { return Iterator<T>(&arr[_size]); }
 
-    Iterator<T> begin() const { return Iterator(&arr[0]); }
-    Iterator<T> end() const { return Iterator(&arr[_size]); }
+    Iterator<T> begin() const { return Iterator<T>(&arr[0]); }
+    Iterator<T> end() const { return Iterator<T>(&arr[_size]); }
 };
 
 #endif
