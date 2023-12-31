@@ -43,7 +43,7 @@ class InventoryManager {
      * to the left side of the array. If the element is on the right side of the range (`right`), the range will be
      * shrunk to the right side of the array. This operation is repeated until the range becomes invalid
      * (`left > right`) or the element is found. The binary search algorithm requires the array to be sorted.
-     * This algorithm in particular requires the array to be sorted ascendingly.
+     * The algorithm that is used in this method in particular requires the array to be sorted ascendingly.
      * 
      * @param id The ID of the item.
      * @returns The index of the item with the ID. If the item is not found, the method
