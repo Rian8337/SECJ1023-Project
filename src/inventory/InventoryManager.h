@@ -30,7 +30,7 @@ class InventoryManager {
     /**
      * Creates a copy of the items in this manager.
      * 
-     * @param deep Whether th deep copy the items.
+     * @param deep Whether to deep copy the items.
      */
     DynamicArray<Item *> copyItems(const bool deep) const;
 
