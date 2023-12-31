@@ -20,8 +20,8 @@ Item::Item(size_t id) {
     price = 0;
 };
 
-Item::Item(const string &name, const string &description, ItemType type, size_t stock,
-           float price) {
+Item::Item(const string &name, const string &description, ItemType type,
+           size_t stock, float price) {
     identifier = new ItemIdentifier(name, description, type);
     this->stock = stock;
 
@@ -29,9 +29,19 @@ Item::Item(const string &name, const string &description, ItemType type, size_t 
 }
 
 Item::Item(const Item &copy) {
-    identifier = new ItemIdentifier(*copy.identifier);
-    stock = copy.stock;
-    price = copy.price;
+    identifier = new ItemIdentifier(copy.getIdentifier()->getID());
+
+    *this = copy;
+}
+
+Item::Item(Item &&other) {
+    identifier = other.identifier;
+    stock = other.stock;
+    price = other.price;
+
+    other.identifier = nullptr;
+    other.stock = 0;
+    other.price = 0;
 }
 
 Item::~Item() { delete identifier; }
@@ -82,6 +92,26 @@ bool Item::operator<(const Item &right) const {
 
 bool Item::operator>(const Item &right) const {
     return *identifier > *right.identifier;
+}
+
+Item &Item::operator=(const Item &right) {
+    *identifier = *right.getIdentifier();
+    stock = right.stock;
+    price = right.price;
+
+    return *this;
+}
+
+Item &Item::operator=(Item &&right) {
+    identifier = right.identifier;
+    stock = right.stock;
+    price = right.price;
+
+    right.identifier = nullptr;
+    right.stock = 0;
+    right.price = 0;
+
+    return *this;
 }
 
 ostream &operator<<(ostream &os, const Item &item) {

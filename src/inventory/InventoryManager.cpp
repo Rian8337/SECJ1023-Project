@@ -2,7 +2,7 @@
 #include "../item/Item.h"
 #include "../item/ItemFilterMethod.h"
 #include "../item/ItemSortMethod.h"
-#include "../utils/ArrayUtils.h"
+#include "../item/ItemType.h"
 #include "../utils/StringUtils.h"
 #include "InventoryBackup.h"
 #include "InventorySearchQuery.h"
@@ -12,10 +12,9 @@
 #include <stdexcept>
 #include <string>
 
-using namespace ArrayUtils;
 using namespace std;
 
-void InventoryManager::sortItems(Item **items, size_t numItems,
+void InventoryManager::sortItems(DynamicArray<Item *> &items,
                                  const ItemSortMethod &sortMethod) {
 
     /**
@@ -108,7 +107,7 @@ void InventoryManager::sortItems(Item **items, size_t numItems,
         return left;
     };
 
-    for (size_t i = 1; i < numItems; ++i) {
+    for (size_t i = 1; i < items.size(); ++i) {
         size_t j = i - 1;
         Item *selected = items[i];
 
@@ -125,50 +124,41 @@ void InventoryManager::sortItems(Item **items, size_t numItems,
 
     if (sortMethod == ItemSortMethod::sortByPriceHighestToSmallest ||
         sortMethod == ItemSortMethod::sortByStockHighestToSmallest) {
-        reverseArray(items, numItems);
+        items.reverse();
     }
 }
 
-Item **InventoryManager::shallowCopyItems() const {
-    Item **items = new Item *[numItems];
+DynamicArray<Item *> InventoryManager::copyItems(const bool deep) const {
+    DynamicArray<Item *> items = DynamicArray<Item *>(this->items.size());
 
-    for (size_t i = 0; i < numItems; ++i) {
-        items[i] = this->items[i];
-    }
-
-    return items;
-}
-
-Item **InventoryManager::deepCopyItems() const {
-    Item **items = new Item *[numItems];
-
-    for (size_t i = 0; i < numItems; ++i) {
-        items[i] = new Item(*this->items[i]);
+    for (Item *item : this->items) {
+        items.append(deep ? new Item(*item) : item);
     }
 
     return items;
 }
 
 size_t InventoryManager::getItemIndex(size_t id) const {
-    // Make a dummy item for binary searching.
-    Item item(id);
+    if (items.empty()) {
+        return 0;
+    }
 
     size_t left = 0;
-    size_t right = numItems - 1;
+    size_t right = items.size() - 1;
 
     while (left <= right) {
         // Get the middle point of the current range.
         const size_t mid = left + (right - left) / 2;
-        Item *midItem = items[mid];
+        size_t midId = items[mid]->getIdentifier()->getID();
 
-        if (item == *midItem) {
+        if (id == midId) {
             return mid;
-        } else if (item > *midItem) {
+        } else if (id > midId) {
             left = mid + 1;
         } else {
             // 0 - 1 on an unsigned number will cause an underflow, so we need to avoid that.
             if (mid == 0) {
-                return left;
+                return mid;
             }
 
             right = mid - 1;
@@ -178,37 +168,40 @@ size_t InventoryManager::getItemIndex(size_t id) const {
     return left;
 }
 
-InventoryManager::InventoryManager() {
-    numItems = 0;
-    itemSize = 10;
-    items = new Item *[itemSize];
-}
+InventoryManager::InventoryManager() { items = DynamicArray<Item *>(10); }
 
 InventoryManager::~InventoryManager() {
-    for (size_t i = 0; i < itemSize; ++i) {
-        delete items[i];
+    for (const Item *item : items) {
+        delete item;
     }
-
-    delete[] items;
 }
 
 void InventoryManager::addItem(Item *item) {
-    addElement(items, item, numItems, itemSize);
+    // Make sure that the item does not exist.
+    size_t idx = getItemIndex(item->getIdentifier()->getID());
+
+    if (!items.empty() && idx < items.size() - 1 &&
+        items[idx]->getIdentifier()->getID() ==
+            item->getIdentifier()->getID()) {
+        return;
+    }
+
+    items.addAt(item, idx);
 }
 
 bool InventoryManager::removeItem(size_t id) {
-    if (numItems == 0) {
+    if (items.empty()) {
         return false;
     }
 
     size_t idx = getItemIndex(id);
 
     // Make sure that the item is what we actually want to remove.
-    if (idx > numItems - 1 || items[idx]->getIdentifier()->getID() != id) {
+    if (idx > items.size() - 1 || items[idx]->getIdentifier()->getID() != id) {
         return false;
     }
 
-    removeAtIndex(items, idx, numItems);
+    items.removeAt(idx);
 
     return true;
 }
@@ -216,33 +209,30 @@ bool InventoryManager::removeItem(size_t id) {
 Item *InventoryManager::getItem(size_t id) const {
     size_t idx = getItemIndex(id);
 
-    if (idx > numItems - 1 || items[idx]->getIdentifier()->getID() != id) {
+    if (idx > items.size() - 1 || items[idx]->getIdentifier()->getID() != id) {
         return nullptr;
     }
 
     return items[idx];
 }
 
-Item **InventoryManager::getItems() const { return items; }
+const DynamicArray<Item *> &InventoryManager::getItems() const { return items; }
 
-Item **InventoryManager::getItems(const ItemSortMethod &sortMethod) {
-    Item **items = shallowCopyItems();
+const DynamicArray<Item *>
+InventoryManager::getItems(const ItemSortMethod &sortMethod) {
+    DynamicArray<Item *> items = copyItems(false);
 
-    sortItems(items, numItems, sortMethod);
+    sortItems(items, sortMethod);
 
     return items;
 }
 
-size_t InventoryManager::getNumItems() const { return numItems; }
-
 InventorySearchResult
 InventoryManager::searchItems(const InventorySearchQuery &query) {
-    size_t numItems = 0;
-    Item **items = new Item *[this->numItems];
+    DynamicArray<Item *> items = DynamicArray<Item *>(this->items.size());
 
     // Apply the filter first and then sort, otherwise the sort operation may be more expensive.
-    for (size_t i = 0; i < this->numItems; ++i) {
-        Item *item = this->items[i];
+    for (Item *item : this->items) {
         bool insert = true;
 
         if (!query.getQuery().empty()) {
@@ -258,10 +248,11 @@ InventoryManager::searchItems(const InventorySearchQuery &query) {
             }
         }
 
-        if (query.getNumItemTypes() > 0) {
+        if (!query.getItemTypes().empty()) {
             insert = false;
 
-            for (size_t j = 0; j < query.getNumItemTypes() && !insert; ++j) {
+            for (size_t j = 0; j < query.getItemTypes().size() && !insert;
+                 ++j) {
                 if (query.getItemTypes()[j] ==
                     item->getIdentifier()->getType()) {
                     insert = true;
@@ -270,30 +261,27 @@ InventoryManager::searchItems(const InventorySearchQuery &query) {
         }
 
         if (insert) {
-            items[numItems++] = item;
+            items.append(item);
         }
     }
 
-    sortItems(items, numItems, query.getSortMethod());
+    sortItems(items, query.getSortMethod());
 
-    return InventorySearchResult(items, numItems);
+    return InventorySearchResult(items);
 }
 
 bool InventoryManager::loadBackup(const InventoryBackup &backup) {
-    Item **items = backup.getItems();
-
-    for (size_t i = 0; i < backup.getNumItems(); ++i) {
-        // Make a deep copy of the item.
-        addItem(new Item(*items[i]));
+    for (Item *item : backup.getItems()) {
+        addItem(new Item(*item));
     }
 
     return true;
 }
 
 InventoryBackup InventoryManager::createBackup() const {
-    return InventoryBackup(deepCopyItems(), numItems);
+    return InventoryBackup(copyItems(true));
 }
 
 InventorySheet InventoryManager::createSheet() const {
-    return InventorySheet(deepCopyItems(), numItems);
+    return InventorySheet(copyItems(true));
 }

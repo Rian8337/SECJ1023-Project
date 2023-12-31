@@ -1,21 +1,25 @@
 #include "InventorySearchResult.h"
 #include "../item/Item.h"
+#include "../utils/DynamicArray.h"
 #include <iomanip>
 #include <iostream>
 
 using namespace std;
 
-InventorySearchResult::InventorySearchResult(Item **items,
-                                             const size_t numItems) {
+InventorySearchResult::InventorySearchResult(
+    const DynamicArray<Item *> &items) {
     this->items = items;
-    this->numItems = numItems;
 }
 
-InventorySearchResult::~InventorySearchResult() { delete[] items; }
+InventorySearchResult::~InventorySearchResult() {
+    for (Item *item : items) {
+        delete item;
+    }
+}
 
-size_t InventorySearchResult::getNumItems() const { return numItems; }
-
-Item **InventorySearchResult::getItems() const { return items; }
+const DynamicArray<Item *> &InventorySearchResult::getItems() const {
+    return items;
+}
 
 ostream &operator<<(ostream &os, const InventorySearchResult &result) {
     os << "Inventory Search Result" << endl
@@ -23,8 +27,8 @@ ostream &operator<<(ostream &os, const InventorySearchResult &result) {
        << "ID" << '\t' << "Name" << string(50, ' ') << '\t' << "Type"
        << string(16, ' ') << '\t' << "Stock" << '\t' << "Price" << endl;
 
-    for (size_t i = 0; i < result.numItems; ++i) {
-        cout << result.items[i]->generateTableRow() << endl;
+    for (const Item *item : result.items) {
+        cout << item->generateTableRow() << endl;
     }
 
     return os;

@@ -1,28 +1,24 @@
 #include "InventoryBackup.h"
 #include "../item/Item.h"
 #include "../item/ItemIdentifier.h"
-#include "../utils/ArrayUtils.h"
+#include "../utils/DynamicArray.h"
 #include <fstream>
 #include <iomanip>
 #include <sstream>
 #include <string>
 
-using namespace ArrayUtils;
 using namespace std;
 
-InventoryBackup::InventoryBackup(Item **items, const size_t numItems) {
+InventoryBackup::InventoryBackup(const DynamicArray<Item *> &items) {
     creationDate = time(0);
 
     this->items = items;
-    this->numItems = numItems;
 }
 
 InventoryBackup::~InventoryBackup() {
-    for (size_t i = 0; i < numItems; ++i) {
-        delete items[i];
+    for (Item *item : items) {
+        delete item;
     }
-
-    delete[] items;
 }
 
 InventoryBackup InventoryBackup::readBackup(const string &fileName) {
@@ -30,9 +26,7 @@ InventoryBackup InventoryBackup::readBackup(const string &fileName) {
     dir += fileName;
 
     ifstream file(dir);
-
-    size_t itemSize = 10;
-    InventoryBackup backup(new Item *[itemSize], 0);
+    InventoryBackup backup(DynamicArray<Item *>(10));
 
     if (!file.is_open()) {
         return backup;
@@ -67,8 +61,7 @@ InventoryBackup InventoryBackup::readBackup(const string &fileName) {
         item->setStock(stoul(extractDataFromLine(line)));
         item->setPrice(stof(extractDataFromLine(line)));
 
-        addElement(backup.items, item, backup.numItems, itemSize);
-
+        backup.items.append(item);
         highestId = max(identifier->getID(), highestId);
     }
 
@@ -79,8 +72,7 @@ InventoryBackup InventoryBackup::readBackup(const string &fileName) {
 }
 
 time_t InventoryBackup::getCreationDate() const { return creationDate; }
-size_t InventoryBackup::getNumItems() const { return numItems; }
-Item **InventoryBackup::getItems() const { return items; }
+const DynamicArray<Item *> &InventoryBackup::getItems() const { return items; }
 
 string InventoryBackup::getFilename() const {
     string name = asctime(gmtime(&creationDate));
@@ -104,8 +96,7 @@ bool InventoryBackup::saveToFile() {
 
     ofstream file(dir);
 
-    for (size_t i = 0; i < numItems; ++i) {
-        const Item *item = items[i];
+    for (const Item *item : items) {
         const ItemIdentifier *identifier = item->getIdentifier();
 
         file << identifier->getID() << ',' << identifier->getName() << ','
@@ -134,8 +125,8 @@ ostream &operator<<(ostream &os, const InventoryBackup &backup) {
        << "ID" << '\t' << "Name" << string(50, ' ') << '\t' << "Type"
        << string(16, ' ') << '\t' << "Stock" << '\t' << "Price (RM)" << endl;
 
-    for (size_t i = 0; i < backup.numItems; ++i) {
-        os << backup.items[i]->generateTableRow() << endl;
+    for (const Item *item : backup.items) {
+        os << item->generateTableRow() << endl;
     }
 
     return os;

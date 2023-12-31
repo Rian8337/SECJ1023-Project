@@ -22,8 +22,10 @@ class ItemIdentifier {
 
   public:
     ItemIdentifier();
-    ItemIdentifier(const string &name, const string &description, ItemType type);
+    ItemIdentifier(const string &name, const string &description,
+                   ItemType type);
     ItemIdentifier(const ItemIdentifier &copy);
+    ItemIdentifier(ItemIdentifier &&other);
 
     /**
      * Resets the incremental ID to the given ID.
@@ -83,6 +85,8 @@ class ItemIdentifier {
     bool operator!=(const ItemIdentifier &right) const;
     bool operator<(const ItemIdentifier &right) const;
     bool operator>(const ItemIdentifier &right) const;
+    ItemIdentifier &operator=(const ItemIdentifier &right);
+    ItemIdentifier &operator=(ItemIdentifier &&right);
 
     friend istream &operator>>(istream &is, ItemIdentifier &identifier);
     friend class Item;

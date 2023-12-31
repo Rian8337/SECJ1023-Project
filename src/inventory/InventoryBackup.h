@@ -3,6 +3,7 @@
 
 #include "../item/Item.h"
 #include "../item/ItemIdentifier.h"
+#include "../utils/DynamicArray.h"
 #include <ctime>
 #include <string>
 
@@ -13,11 +14,10 @@ using namespace std;
 */
 class InventoryBackup {
     time_t creationDate;
-    size_t numItems;
-    Item **items;
+    DynamicArray<Item *> items;
 
   public:
-    InventoryBackup(Item **items, const size_t numItems);
+    InventoryBackup(const DynamicArray<Item *> &items);
     ~InventoryBackup();
 
     /**
@@ -34,14 +34,9 @@ class InventoryBackup {
     time_t getCreationDate() const;
 
     /**
-     * The amount of items in this `InventoryBackup`.
-    */
-    size_t getNumItems() const;
-
-    /**
      * The items in this `InventoryBackup`.
     */
-    Item **getItems() const;
+    const DynamicArray<Item *> &getItems() const;
 
     /**
      * The filename of this `InventoryBackup` were it to be saved.

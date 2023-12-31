@@ -57,7 +57,7 @@ void addItem(InventoryManager &manager) {
 }
 
 void removeItem(InventoryManager &manager) {
-    if (manager.getNumItems() == 0) {
+    if (manager.getItems().empty()) {
         cout << "No items are in the inventory manager." << endl;
         return;
     }
@@ -85,7 +85,7 @@ void removeItem(InventoryManager &manager) {
 }
 
 void editItem(InventoryManager &manager) {
-    if (manager.getNumItems() == 0) {
+    if (manager.getItems().empty()) {
         cout << "No items are in the inventory manager." << endl;
         return;
     }
@@ -121,7 +121,7 @@ void editItem(InventoryManager &manager) {
 }
 
 void displayItemDetails(InventoryManager &manager) {
-    if (manager.getNumItems() == 0) {
+    if (manager.getItems().empty()) {
         cout << "No items are in the inventory manager." << endl;
         return;
     }
@@ -157,7 +157,7 @@ void displayItemDetails(InventoryManager &manager) {
 }
 
 void listItems(const InventoryManager &manager) {
-    if (manager.getNumItems() == 0) {
+    if (manager.getItems().empty()) {
         cout << "No items are in the inventory manager." << endl;
         return;
     }
@@ -166,7 +166,7 @@ void listItems(const InventoryManager &manager) {
 }
 
 void searchItems(InventoryManager &manager) {
-    if (manager.getNumItems() == 0) {
+    if (manager.getItems().empty()) {
         cout << "No items are in the inventory manager." << endl;
         return;
     }
@@ -324,7 +324,7 @@ void searchItems(InventoryManager &manager) {
         case 8: {
             InventorySearchResult result = manager.searchItems(searchQuery);
 
-            if (result.getNumItems() == 0) {
+            if (result.getItems().empty()) {
                 cout << "No items were found.";
                 break;
             }
@@ -342,7 +342,7 @@ void searchItems(InventoryManager &manager) {
 }
 
 void backupItems(const InventoryManager &manager) {
-    if (manager.getNumItems() == 0) {
+    if (manager.getItems().empty()) {
         cout << "No items are in the inventory manager." << endl;
         return;
     }
@@ -367,7 +367,7 @@ void loadBackup(InventoryManager &manager) {
 
     InventoryBackup backup = InventoryBackup::readBackup(filename);
 
-    if (backup.getNumItems() == 0) {
+    if (backup.getItems().empty()) {
         cout << "No items were found in the backup file." << endl;
         return;
     }

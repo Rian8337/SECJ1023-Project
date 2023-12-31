@@ -23,18 +23,26 @@ ItemIdentifier::ItemIdentifier(size_t id) {
     type = ItemType::none;
 }
 
-ItemIdentifier::ItemIdentifier(const string &name, const string &description, ItemType type) {
+ItemIdentifier::ItemIdentifier(const string &name, const string &description,
+                               ItemType type) {
     id = ++incrementalId;
     this->name = name;
     this->description = description;
     this->type = type;
 }
 
-ItemIdentifier::ItemIdentifier(const ItemIdentifier &copy) {
-    id = copy.id;
-    name = copy.name;
-    description = copy.description;
-    type = copy.type;
+ItemIdentifier::ItemIdentifier(const ItemIdentifier &copy) { *this = copy; }
+
+ItemIdentifier::ItemIdentifier(ItemIdentifier &&other) {
+    id = other.id;
+    name = other.name;
+    description = other.description;
+    type = other.type;
+
+    other.id = 0;
+    other.name = "";
+    other.description = "";
+    other.type = ItemType::none;
 }
 
 size_t ItemIdentifier::getID() const { return id; }
@@ -69,6 +77,33 @@ bool ItemIdentifier::operator<(const ItemIdentifier &right) const {
 
 bool ItemIdentifier::operator>(const ItemIdentifier &right) const {
     return id > right.id;
+}
+
+ItemIdentifier &ItemIdentifier::operator=(const ItemIdentifier &right) {
+    if (&right != this) {
+        id = right.id;
+        name = right.name;
+        description = right.description;
+        type = right.type;
+    }
+
+    return *this;
+}
+
+ItemIdentifier &ItemIdentifier::operator=(ItemIdentifier &&right) {
+    if (&right != this) {
+        id = right.id;
+        name = right.name;
+        description = right.description;
+        type = right.type;
+
+        right.id = 0;
+        right.name = "";
+        right.description = "";
+        right.type = ItemType::none;
+    }
+
+    return *this;
 }
 
 istream &operator>>(istream &is, ItemIdentifier &identifier) {

@@ -17,9 +17,10 @@ class Item {
   public:
     Item();
     Item(size_t id);
-    Item(const string &name, const string &description, ItemType type, size_t stock,
-         float price);
+    Item(const string &name, const string &description, ItemType type,
+         size_t stock, float price);
     Item(const Item &copy);
+    Item(Item &&other);
 
     ~Item();
 
@@ -57,6 +58,8 @@ class Item {
     bool operator!=(const Item &right) const;
     bool operator<(const Item &right) const;
     bool operator>(const Item &right) const;
+    Item &operator=(const Item &right);
+    Item &operator=(Item &&right);
     friend ostream &operator<<(ostream &os, const Item &item);
     friend istream &operator>>(istream &is, Item &item);
 };

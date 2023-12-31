@@ -4,6 +4,7 @@
 #include "../item/Item.h"
 #include "../item/ItemFilterMethod.h"
 #include "../item/ItemSortMethod.h"
+#include "../utils/DynamicArray.h"
 #include "InventoryBackup.h"
 #include "InventorySearchQuery.h"
 #include "InventorySearchResult.h"
@@ -15,40 +16,34 @@ using namespace std;
  * The manager of an inventory.
 */
 class InventoryManager {
-    size_t numItems;
-    size_t itemSize;
-    Item **items;
+    DynamicArray<Item *> items;
 
     /**
      * Performs a binary insertion sort on an array of items.
      * 
      * @param items The array of items to sort.
-     * @param numItems The amount of items in the array.
      * @param sortMethod The method to sort the items for.
     */
-    void sortItems(Item **items, const size_t numItems,
+    void sortItems(DynamicArray<Item *> &items,
                    const ItemSortMethod &sortMethod);
 
     /**
-     * Creates a shallow copy of the items in this manager.
+     * Creates a copy of the items in this manager.
      * 
-     * @note
-     * The array returned by this method is a dynamically allocated array.
-     * Ensure to delete it from the memory after operation.
+     * @param deep Whether th deep copy the items.
      */
-    Item **shallowCopyItems() const;
-
-    /**
-     * Creates a deep copy of the items in this manager.
-     * 
-     * @note
-     * The array returned by this method is a dynamically allocated array.
-     * Ensure to delete it from the memory after operation.
-    */
-    Item **deepCopyItems() const;
+    DynamicArray<Item *> copyItems(const bool deep) const;
 
     /**
      * Gets the index of an item with an ID using the binary search algorithm.
+     * 
+     * @note
+     * The binary search algorithm narrows the index of the element by comparing it against the middle
+     * element of the given range. If the element is on the left side of the range (`left`), the range will be shrunk
+     * to the left side of the array. If the element is on the right side of the range (`right`), the range will be
+     * shrunk to the right side of the array. This operation is repeated until the range becomes invalid
+     * (`left > right`) or the element is found. The binary search algorithm requires the array to be sorted.
+     * This algorithm in particular requires the array to be sorted ascendingly.
      * 
      * @param id The ID of the item.
      * @returns The index of the item with the ID. If the item is not found, the method
@@ -93,23 +88,14 @@ class InventoryManager {
     /**
      * The items on this `InventoryManager`.
     */
-    Item **getItems() const;
+    const DynamicArray<Item *> &getItems() const;
 
     /**
      * Gets the sorted items on this `InventoryManager`.
      * 
      * @param sortMethod The sort method.
-     * 
-     * @note
-     * The array created from this method is a dynamically allocated array.
-     * Ensure to delete it from the memory after operation.
     */
-    Item **getItems(const ItemSortMethod &sortMethod);
-
-    /**
-     * The amount of items in this `InventoryManager`.
-    */
-    size_t getNumItems() const;
+    const DynamicArray<Item *> getItems(const ItemSortMethod &sortMethod);
 
     /**
      * Searches for items in this `InventoryManager`.

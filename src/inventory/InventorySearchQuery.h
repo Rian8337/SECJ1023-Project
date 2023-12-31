@@ -4,6 +4,7 @@
 #include "../item/ItemFilterMethod.h"
 #include "../item/ItemSortMethod.h"
 #include "../item/ItemType.h"
+#include "../utils/DynamicArray.h"
 #include <string>
 
 using namespace std;
@@ -15,14 +16,10 @@ class InventorySearchQuery {
     string query;
     ItemSortMethod sortMethod;
     ItemFilterMethod filterMethod;
-
-    ItemType *itemTypes;
-    size_t itemTypesSize;
-    size_t numItemTypes;
+    DynamicArray<ItemType> itemTypes;
 
   public:
     InventorySearchQuery();
-    ~InventorySearchQuery();
 
     /**
      * The query of this `InventorySearchQuery`.
@@ -57,7 +54,7 @@ class InventorySearchQuery {
     /**
      * The types of items to be included in the result.
     */
-    ItemType *getItemTypes() const;
+    const DynamicArray<ItemType> &getItemTypes() const;
 
     /**
      * Adds an item type to be included in the result.
@@ -77,11 +74,6 @@ class InventorySearchQuery {
      * Removes all item types filter.
     */
     void emptyItemTypes();
-
-    /**
-     * The amount of item types to be included in the result.
-    */
-    size_t getNumItemTypes() const;
 
     friend ostream &operator<<(ostream &os, const InventorySearchQuery &query);
 };

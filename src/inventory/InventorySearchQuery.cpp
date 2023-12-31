@@ -2,26 +2,23 @@
 #include "../item/ItemFilterMethod.h"
 #include "../item/ItemSortMethod.h"
 #include "../item/ItemType.h"
-#include "../utils/ArrayUtils.h"
+#include "../utils/DynamicArray.h"
 #include <iostream>
 #include <string>
 
-using namespace ArrayUtils;
 using namespace std;
 
 InventorySearchQuery::InventorySearchQuery() {
     query = "";
     sortMethod = ItemSortMethod::sortById;
     filterMethod = ItemFilterMethod::filterByName;
-    itemTypesSize = 5;
-    numItemTypes = 0;
-    itemTypes = new ItemType[itemTypesSize];
+    itemTypes = DynamicArray<ItemType>(5);
 }
 
-InventorySearchQuery::~InventorySearchQuery() { delete[] itemTypes; }
-
 string InventorySearchQuery::getQuery() const { return query; }
-void InventorySearchQuery::setQuery(const string &query) { this->query = query; }
+void InventorySearchQuery::setQuery(const string &query) {
+    this->query = query;
+}
 
 ItemSortMethod InventorySearchQuery::getSortMethod() const {
     return sortMethod;
@@ -37,23 +34,23 @@ void InventorySearchQuery::setFilterMethod(ItemFilterMethod filterMethod) {
     this->filterMethod = filterMethod;
 }
 
-ItemType *InventorySearchQuery::getItemTypes() const { return itemTypes; }
+const DynamicArray<ItemType> &InventorySearchQuery::getItemTypes() const {
+    return itemTypes;
+}
 
 void InventorySearchQuery::addItemType(const ItemType itemType) {
-    addElement(itemTypes, itemType, numItemTypes, itemTypesSize, true);
+    if (itemTypes.has(itemType)) {
+        return;
+    }
+
+    itemTypes.append(itemType);
 }
 
 void InventorySearchQuery::removeItemType(const ItemType itemType) {
-    removeElement(itemTypes, itemType, numItemTypes);
+    itemTypes.remove(itemType);
 }
 
-void InventorySearchQuery::emptyItemTypes() {
-    // We have no way to "remove elements from an array" other than setting
-    // the counter to 0 to make it seem like the elements were removed.
-    numItemTypes = 0;
-}
-
-size_t InventorySearchQuery::getNumItemTypes() const { return numItemTypes; }
+void InventorySearchQuery::emptyItemTypes() { itemTypes.clear(); }
 
 ostream &operator<<(ostream &os, const InventorySearchQuery &query) {
     os << "Inventory Search Information" << endl
@@ -64,10 +61,10 @@ ostream &operator<<(ostream &os, const InventorySearchQuery &query) {
        << "Filter by: " << itemFilterMethodToString(query.filterMethod) << endl
        << "Included item types: ";
 
-    if (query.numItemTypes > 0) {
+    if (query.itemTypes.size() > 0) {
         os << itemTypeToString(query.itemTypes[0]);
 
-        for (size_t i = 1; i < query.numItemTypes; ++i) {
+        for (size_t i = 1; i < query.itemTypes.size(); ++i) {
             os << ", " << itemTypeToString(query.itemTypes[i]);
         }
     } else {

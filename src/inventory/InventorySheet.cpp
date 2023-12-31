@@ -6,24 +6,20 @@
 
 using namespace std;
 
-InventorySheet::InventorySheet(Item **items, const size_t numItems) {
+InventorySheet::InventorySheet(const DynamicArray<Item *> &items) {
     creationDate = time(0);
 
     this->items = items;
-    this->numItems = numItems;
 }
 
 InventorySheet::~InventorySheet() {
-    for (size_t i = 0; i < numItems; ++i) {
-        delete items[i];
+    for (Item *item : items) {
+        delete item;
     }
-
-    delete[] items;
 }
 
 time_t InventorySheet::getCreationDate() const { return creationDate; }
-size_t InventorySheet::getNumItems() const { return numItems; }
-Item **InventorySheet::getItems() const { return items; }
+const DynamicArray<Item *> &InventorySheet::getItems() const { return items; }
 
 ostream &operator<<(ostream &os, const InventorySheet &sheet) {
     string dateStr(asctime(gmtime(&sheet.creationDate)));
@@ -41,8 +37,8 @@ ostream &operator<<(ostream &os, const InventorySheet &sheet) {
        << "ID" << '\t' << "Name" << string(50, ' ') << '\t' << "Type"
        << string(16, ' ') << '\t' << "Stock" << '\t' << "Price (RM)" << endl;
 
-    for (size_t i = 0; i < sheet.numItems; ++i) {
-        os << sheet.items[i]->generateTableRow() << endl;
+    for (const Item *item : sheet.items) {
+        os << item->generateTableRow() << endl;
     }
 
     return os;
