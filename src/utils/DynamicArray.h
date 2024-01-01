@@ -172,9 +172,8 @@ template <typename T> class DynamicArray {
     void clear() {
         _size = 0;
 
-        // Trigger a resize with the initial capacity so that this DynamicArray is actually
-        // emptied. Essentially, this resets this DynamicArray to its initial state.
-        resize(DynamicArray::initialCapacity);
+        // Trigger a resize with the current capacity so that this DynamicArray is actually emptied.
+        resize(_capacity);
     }
 
     /**
