@@ -186,7 +186,7 @@ void InventoryManager::addItem(Item *item) {
         return;
     }
 
-    items.addAt(item, idx);
+    items.add(item, idx);
 }
 
 bool InventoryManager::removeItem(size_t id) {
@@ -201,7 +201,7 @@ bool InventoryManager::removeItem(size_t id) {
         return false;
     }
 
-    items.removeAt(idx);
+    items.remove(idx);
 
     return true;
 }

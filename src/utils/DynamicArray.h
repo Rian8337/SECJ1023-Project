@@ -73,14 +73,14 @@ template <typename T> class DynamicArray {
      * 
      * @param element The element to prepend.
     */
-    void prepend(const T &element) { addAt(element, 0); }
+    void prepend(const T &element) { add(element, 0); }
 
     /**
      * Appends an element into this `DynamicArray`.
      * 
      * @param element The element to append.
     */
-    void append(const T &element) { addAt(element, _size); }
+    void append(const T &element) { add(element, _size); }
 
     /**
      * Adds an element to the array at the given index.
@@ -88,7 +88,7 @@ template <typename T> class DynamicArray {
      * @param element The element to add.
      * @param index The index to add on.
     */
-    void addAt(const T &element, const size_t index) {
+    void add(const T &element, const size_t index) {
         if (_size == _capacity - 1) {
             // Resize the array if it does not fit.
             resize(_capacity * 2);
@@ -113,7 +113,7 @@ template <typename T> class DynamicArray {
     bool remove(const T &element) {
         for (size_t i = 0; i < _size; ++i) {
             if (arr[i] == element) {
-                removeAt(i);
+                remove(i);
 
                 return true;
             }
@@ -128,7 +128,7 @@ template <typename T> class DynamicArray {
      * @param index The index.
      * @returns The removed element.
     */
-    T removeAt(const size_t index) {
+    T remove(const size_t index) {
         if (index > _size - 1) {
             throw out_of_range("Index is out of bounds");
         }
