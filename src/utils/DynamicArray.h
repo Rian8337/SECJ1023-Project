@@ -129,7 +129,7 @@ template <typename T> class DynamicArray {
      * @returns The removed element.
     */
     T remove(const size_t index) {
-        if (index > _size - 1) {
+        if (index < 0 || index > _size - 1) {
             throw out_of_range("Index is out of bounds");
         }
 
