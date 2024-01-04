@@ -4,6 +4,7 @@
 #include "Iterator.h"
 #include <cstddef>
 #include <stdexcept>
+#include <utility>
 
 using namespace std;
 
@@ -11,7 +12,7 @@ using namespace std;
  * Represents a dynamically-sized array.
 */
 template <typename T> class DynamicArray {
-    T *arr;
+    T *arr = nullptr;
     size_t _size;
     size_t _capacity;
     static const size_t initialCapacity = 10;
@@ -30,17 +31,13 @@ template <typename T> class DynamicArray {
 
     DynamicArray(const DynamicArray<T> &copy) { *this = copy; }
 
-    DynamicArray(DynamicArray<T> &&other) {
-        _size = other._size;
-        _capacity = other._capacity;
-        arr = other.arr;
+    DynamicArray(DynamicArray<T> &&other) { *this = move(other); }
 
-        other._size = 0;
-        other._capacity = DynamicArray::initialCapacity;
-        other.arr = nullptr;
+    ~DynamicArray() {
+        if (arr != nullptr) {
+            delete[] arr;
+        }
     }
-
-    ~DynamicArray() { delete[] arr; }
 
     /**
      * The size of this `DynamicArray`.
@@ -225,7 +222,9 @@ template <typename T> class DynamicArray {
                 newArr[i] = right[i];
             }
 
-            delete[] arr;
+            if (arr != nullptr) {
+                delete[] arr;
+            }
 
             arr = newArr;
             _size = right._size;
@@ -238,7 +237,9 @@ template <typename T> class DynamicArray {
     DynamicArray<T> &operator=(DynamicArray<T> &&right) {
         // Reference: https://learn.microsoft.com/en-us/cpp/cpp/move-constructors-and-move-assignment-operators-cpp?view=msvc-170#to-create-a-move-constructor-for-a-c-class
         if (&right != this) {
-            delete[] arr;
+            if (arr != nullptr) {
+                delete[] arr;
+            }
 
             _size = right._size;
             _capacity = right._capacity;
