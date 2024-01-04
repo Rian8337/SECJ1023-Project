@@ -1,8 +1,8 @@
 #ifndef INVENTORY_SEARCH_RESULT_H
 #define INVENTORY_SEARCH_RESULT_H
 
-#include "../item/Item.h"
-#include "../utils/DynamicArray.h"
+#include "../../item/Item.h"
+#include "../../utils/DynamicArray.h"
 
 using namespace std;
 

@@ -1,6 +1,6 @@
 #include "InventorySearchResult.h"
-#include "../item/Item.h"
-#include "../utils/DynamicArray.h"
+#include "../../item/Item.h"
+#include "../../utils/DynamicArray.h"
 #include <iomanip>
 #include <iostream>
 

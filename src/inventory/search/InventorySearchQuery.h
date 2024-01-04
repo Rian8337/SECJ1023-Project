@@ -1,10 +1,10 @@
 #ifndef INVENTORY_SEARCH_QUERY_H
 #define INVENTORY_SEARCH_QUERY_H
 
-#include "../item/ItemFilterMethod.h"
-#include "../item/ItemSortMethod.h"
-#include "../item/ItemType.h"
-#include "../utils/DynamicArray.h"
+#include "../../utils/DynamicArray.h"
+#include "ItemFilterMethod.h"
+#include "ItemSortMethod.h"
+#include "ItemType.h"
 #include <string>
 
 using namespace std;

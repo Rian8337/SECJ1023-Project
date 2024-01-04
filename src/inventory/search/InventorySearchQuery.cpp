@@ -1,8 +1,8 @@
 #include "InventorySearchQuery.h"
-#include "../item/ItemFilterMethod.h"
-#include "../item/ItemSortMethod.h"
-#include "../item/ItemType.h"
-#include "../utils/DynamicArray.h"
+#include "../../utils/DynamicArray.h"
+#include "ItemFilterMethod.h"
+#include "ItemSortMethod.h"
+#include "ItemType.h"
 #include <iostream>
 #include <string>
 
