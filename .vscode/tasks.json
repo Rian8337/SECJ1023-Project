@@ -6,6 +6,7 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",
+                "-std=c++11",
                 "-g",
                 "$(find",
                 "${workspaceFolder}/src",
@@ -31,6 +32,7 @@
             "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
+                "-std=c++11",
                 "-g",
                 "$((Get-ChildItem",
                 "-Path",
@@ -56,6 +58,7 @@
             "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
+                "-std=c++11",
                 "-g",
                 "$(find",
                 "${workspaceFolder}/src",
@@ -74,7 +77,7 @@
                 "kind": "build"
             },
             "detail": "Builds all *.cpp files in the source directory."
-        },
+        }
     ],
     "version": "2.0.0"
 }
