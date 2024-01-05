@@ -1,6 +1,7 @@
 #include "FoodItem.h"
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 

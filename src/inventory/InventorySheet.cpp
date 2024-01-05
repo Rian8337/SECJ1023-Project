@@ -2,6 +2,7 @@
 #include "../item/Item.h"
 #include <ctime>
 #include <iomanip>
+#include <iostream>
 #include <string>
 
 using namespace std;
