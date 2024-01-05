@@ -9,18 +9,14 @@ size_t ItemIdentifier::incrementalId = 0;
 
 void ItemIdentifier::resetIncrementalId(size_t id) { incrementalId = id; }
 
-ItemIdentifier::ItemIdentifier() {
-    id = ++incrementalId;
-    name = "";
-    description = "";
-    type = ItemType::none;
-}
+ItemIdentifier::ItemIdentifier(ItemType type)
+    : ItemIdentifier(++incrementalId, type) {}
 
-ItemIdentifier::ItemIdentifier(size_t id) {
+ItemIdentifier::ItemIdentifier(size_t id, ItemType type) {
     this->id = id;
     name = "";
     description = "";
-    type = ItemType::none;
+    this->type = type;
 }
 
 ItemIdentifier::ItemIdentifier(const string &name, const string &description,
@@ -57,7 +53,6 @@ void ItemIdentifier::setDescription(const string &description) {
 }
 
 ItemType ItemIdentifier::getType() const { return type; }
-void ItemIdentifier::setType(ItemType type) { this->type = type; }
 
 void ItemIdentifier::setIncrementalID(size_t incrementalId) {
     ItemIdentifier::incrementalId = incrementalId;
@@ -151,23 +146,6 @@ istream &operator>>(istream &is, ItemIdentifier &identifier) {
 
         identifier.setDescription(description);
         break;
-    }
-
-    listItemTypes();
-    cout << endl;
-
-    while (true) {
-        string type;
-        cout << "Enter item type (currently "
-             << itemTypeToString(identifier.type) << "): ";
-        getline(is, type);
-
-        try {
-            identifier.setType(parseItemType((short)stoi(type)));
-            break;
-        } catch (const exception &ignored) {
-            cout << "Invalid item type." << endl;
-        }
     }
 
     return is;

@@ -1,6 +1,18 @@
 #include "InventoryBackup.h"
+#include "../item/BreakfastSpreadItem.h"
+#include "../item/CosmeticItem.h"
+#include "../item/FoodItem.h"
+#include "../item/FruitItem.h"
 #include "../item/Item.h"
 #include "../item/ItemIdentifier.h"
+#include "../item/ItemType.h"
+#include "../item/ItemWithVolume.h"
+#include "../item/ItemWithWeight.h"
+#include "../item/KitchenwareItem.h"
+#include "../item/NoodlesItem.h"
+#include "../item/SoftDrinksItem.h"
+#include "../item/VegetableItem.h"
+#include "../item/WashingItem.h"
 #include "../utils/DynamicArray.h"
 #include <fstream>
 #include <iomanip>
@@ -32,16 +44,16 @@ InventoryBackup InventoryBackup::readBackup(const string &fileName) {
         return backup;
     }
 
-    auto extractDataFromLine = [](string &line) {
+    string line;
+    size_t highestId = 0;
+
+    auto extractDataFromLine = [&]() {
         size_t sepIdx = line.find(',');
         string substr = line.substr(0, sepIdx);
         line.erase(0, sepIdx + 1);
 
         return substr;
     };
-
-    string line;
-    size_t highestId = 0;
 
     while (!file.eof()) {
         getline(file, line);
@@ -50,19 +62,65 @@ InventoryBackup InventoryBackup::readBackup(const string &fileName) {
             break;
         }
 
-        Item *item = new Item();
+        size_t id = stoul(extractDataFromLine());
+        string name = extractDataFromLine();
+        string description = extractDataFromLine();
+        ItemType type = parseItemType((short)stoi(extractDataFromLine()));
+
+        Item *item;
+
+        switch (type) {
+        case ItemType::cosmetic:
+            item = new CosmeticItem(id);
+            break;
+        case ItemType::kitchenware:
+            item = new KitchenwareItem(id);
+            break;
+        case ItemType::softDrinks:
+            item = new SoftDrinksItem(id);
+            break;
+        case ItemType::breakfastSpread:
+            item = new BreakfastSpreadItem(id);
+            break;
+        case ItemType::noodles:
+            item = new NoodlesItem(id);
+            break;
+        case ItemType::washing:
+            item = new WashingItem(id);
+            break;
+        case ItemType::fruit:
+            item = new FruitItem(id);
+            break;
+        case ItemType::vegetables:
+            item = new VegetableItem(id);
+            break;
+        default:
+            throw invalid_argument("Unable to infer item type from backup");
+        }
+
         ItemIdentifier *identifier = item->getIdentifier();
 
-        identifier->setID(stoul(extractDataFromLine(line)));
-        identifier->setName(extractDataFromLine(line));
-        identifier->setDescription(extractDataFromLine(line));
-        identifier->setType(
-            parseItemType((short)stoi(extractDataFromLine(line))));
-        item->setStock(stoul(extractDataFromLine(line)));
-        item->setPrice(stof(extractDataFromLine(line)));
+        identifier->setName(name);
+        identifier->setDescription(description);
+        item->setStock(stoul(extractDataFromLine()));
+        item->setPrice(stof(extractDataFromLine()));
 
+        // Extract additional data.
+        if (FoodItem *foodItem = dynamic_cast<FoodItem *>(item)) {
+            foodItem->setCalories(stof(extractDataFromLine()));
+        }
+
+        if (ItemWithVolume *volumeItem = dynamic_cast<ItemWithVolume *>(item)) {
+            volumeItem->setVolume(stof(extractDataFromLine()));
+        }
+
+        if (ItemWithWeight *weightItem = dynamic_cast<ItemWithWeight *>(item)) {
+            weightItem->setWeight(stof(extractDataFromLine()));
+        }
+
+        // Finally, insert the data and save the highest item ID.
         backup.items.append(item);
-        highestId = max(identifier->getID(), highestId);
+        highestId = max(id, highestId);
     }
 
     // Set the incremental ID so that subsequent item additions have the correct ID.
@@ -96,12 +154,27 @@ bool InventoryBackup::saveToFile() {
 
     ofstream file(dir);
 
-    for (const Item *item : items) {
+    for (Item *item : items) {
         const ItemIdentifier *identifier = item->getIdentifier();
 
         file << identifier->getID() << ',' << identifier->getName() << ','
              << identifier->getDescription() << ',' << identifier->getType()
-             << ',' << item->getStock() << ',' << item->getPrice() << endl;
+             << ',' << item->getStock() << ',' << item->getPrice();
+
+        // Store additional data.
+        if (FoodItem *foodItem = dynamic_cast<FoodItem *>(item)) {
+            file << ',' << foodItem->getCalories();
+        }
+
+        if (ItemWithVolume *volumeItem = dynamic_cast<ItemWithVolume *>(item)) {
+            file << ',' << volumeItem->getVolume();
+        }
+
+        if (ItemWithWeight *weightItem = dynamic_cast<ItemWithWeight *>(item)) {
+            file << ',' << weightItem->getWeight();
+        }
+
+        file << endl;
     }
 
     file.close();

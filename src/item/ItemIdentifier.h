@@ -18,10 +18,10 @@ class ItemIdentifier {
     string description;
     ItemType type;
 
-    ItemIdentifier(size_t id);
+    ItemIdentifier(size_t id, ItemType type);
 
   public:
-    ItemIdentifier();
+    ItemIdentifier(ItemType type = ItemType::none);
     ItemIdentifier(const string &name, const string &description,
                    ItemType type);
     ItemIdentifier(const ItemIdentifier &copy);
@@ -68,11 +68,6 @@ class ItemIdentifier {
      * The type of the `Item` holding this `ItemIdentifier`.
     */
     ItemType getType() const;
-
-    /**
-     * The type of the `Item` holding this `ItemIdentifier`.
-    */
-    void setType(ItemType type);
 
     /**
      * Sets the current incremental ID.

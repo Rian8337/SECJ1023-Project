@@ -1,4 +1,4 @@
-#ifndef ITEM_TYPE_H
+#ifndef ITEM_H
 #define ITEM_H
 
 #include "ItemIdentifier.h"
@@ -10,18 +10,29 @@ using namespace std;
  * Represents an item.
 */
 class Item {
+  protected:
     ItemIdentifier *identifier;
     size_t stock;
     float price;
 
-  public:
-    Item();
-    Item(size_t id);
+    /**
+     * Returns an output of this `Item` to the console.
+    */
+    virtual string outputToConsole() const;
+
+    /**
+     * Populates this `Item` with data from user input.
+    */
+    virtual void inputData();
+
+    Item(ItemType type = ItemType::none);
+    Item(size_t id, ItemType type);
     Item(const string &name, const string &description, ItemType type,
          size_t stock, float price);
     Item(const Item &copy);
     Item(Item &&other);
 
+  public:
     ~Item();
 
     /**
@@ -53,6 +64,11 @@ class Item {
      * Generates a table row of this `Item`.
     */
     string generateTableRow() const;
+
+    /**
+     * Deep clones this `Item`.
+    */
+    virtual Item *deepClone() const = 0;
 
     bool operator==(const Item &right) const;
     bool operator!=(const Item &right) const;

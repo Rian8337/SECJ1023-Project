@@ -1,13 +1,13 @@
 #ifndef INVENTORY_MANAGER_H
 #define INVENTORY_MANAGER_H
 
-#include "../../item/Item.h"
-#include "../../utils/DynamicArray.h"
+#include "../item/Item.h"
+#include "../utils/DynamicArray.h"
+#include "./search/InventorySearchQuery.h"
+#include "./search/InventorySearchResult.h"
 #include "./search/ItemFilterMethod.h"
 #include "./search/ItemSortMethod.h"
 #include "InventoryBackup.h"
-#include "InventorySearchQuery.h"
-#include "InventorySearchResult.h"
 #include "InventorySheet.h"
 
 using namespace std;

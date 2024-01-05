@@ -1,11 +1,19 @@
 #include "./inventory/InventoryBackup.h"
 #include "./inventory/InventoryManager.h"
-#include "./inventory/InventorySearchQuery.h"
-#include "./inventory/InventorySearchResult.h"
+#include "./inventory/search/InventorySearchQuery.h"
+#include "./inventory/search/InventorySearchResult.h"
+#include "./inventory/search/ItemFilterMethod.h"
+#include "./inventory/search/ItemSortMethod.h"
+#include "./item/BreakfastSpreadItem.h"
+#include "./item/CosmeticItem.h"
+#include "./item/FruitItem.h"
 #include "./item/Item.h"
-#include "./item/ItemFilterMethod.h"
-#include "./item/ItemSortMethod.h"
 #include "./item/ItemType.h"
+#include "./item/KitchenwareItem.h"
+#include "./item/NoodlesItem.h"
+#include "./item/SoftDrinksItem.h"
+#include "./item/VegetableItem.h"
+#include "./item/WashingItem.h"
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -47,7 +55,57 @@ short getSelection(short lowest, short highest, bool allowGoingBack = true) {
 }
 
 void addItem(InventoryManager &manager) {
-    Item *item = new Item();
+    listItemTypes();
+    cout << endl;
+
+    ItemType itemType;
+
+    while (true) {
+        short selection = getSelection(1, itemTypeHighest, true);
+        if (selection == -1) {
+            return;
+        }
+
+        try {
+            itemType = parseItemType(selection);
+            cout << endl;
+
+            break;
+        } catch (const exception &ignored) {
+            cout << "Invalid item type." << endl;
+        }
+    }
+
+    Item *item;
+
+    switch (itemType) {
+    case ItemType::cosmetic:
+        item = new CosmeticItem();
+        break;
+    case ItemType::kitchenware:
+        item = new KitchenwareItem();
+        break;
+    case ItemType::softDrinks:
+        item = new SoftDrinksItem();
+        break;
+    case ItemType::breakfastSpread:
+        item = new BreakfastSpreadItem();
+        break;
+    case ItemType::noodles:
+        item = new NoodlesItem();
+        break;
+    case ItemType::washing:
+        item = new WashingItem();
+        break;
+    case ItemType::fruit:
+        item = new FruitItem();
+        break;
+    case ItemType::vegetables:
+        item = new VegetableItem();
+        break;
+    default:
+        throw invalid_argument("Unable to infer item type from backup");
+    }
 
     cin >> *item;
 
