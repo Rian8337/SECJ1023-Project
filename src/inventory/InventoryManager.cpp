@@ -1,14 +1,6 @@
 #include "InventoryManager.h"
-#include "../item/BreakfastSpreadItem.h"
-#include "../item/CosmeticItem.h"
-#include "../item/FruitItem.h"
 #include "../item/Item.h"
 #include "../item/ItemType.h"
-#include "../item/KitchenwareItem.h"
-#include "../item/NoodlesItem.h"
-#include "../item/SoftDrinksItem.h"
-#include "../item/VegetableItem.h"
-#include "../item/WashingItem.h"
 #include "../utils/StringUtils.h"
 #include "./search/InventorySearchQuery.h"
 #include "./search/InventorySearchResult.h"
@@ -261,32 +253,9 @@ InventoryManager::searchItems(const InventorySearchQuery &query) {
 
             for (size_t j = 0; j < query.getItemTypes().size() && !insert;
                  ++j) {
-                switch (query.getItemTypes()[j]) {
-                case ItemType::cosmetic:
-                    insert = dynamic_cast<CosmeticItem *>(item) != nullptr;
-                    break;
-                case ItemType::kitchenware:
-                    insert = dynamic_cast<KitchenwareItem *>(item) != nullptr;
-                    break;
-                case ItemType::softDrinks:
-                    insert = dynamic_cast<SoftDrinksItem *>(item) != nullptr;
-                    break;
-                case ItemType::breakfastSpread:
-                    insert =
-                        dynamic_cast<BreakfastSpreadItem *>(item) != nullptr;
-                    break;
-                case ItemType::noodles:
-                    insert = dynamic_cast<NoodlesItem *>(item) != nullptr;
-                    break;
-                case ItemType::washing:
-                    insert = dynamic_cast<WashingItem *>(item) != nullptr;
-                    break;
-                case ItemType::fruit:
-                    insert = dynamic_cast<FruitItem *>(item) != nullptr;
-                    break;
-                case ItemType::vegetables:
-                    insert = dynamic_cast<VegetableItem *>(item) != nullptr;
-                    break;
+                if (query.getItemTypes()[j] ==
+                    item->getIdentifier()->getType()) {
+                    insert = true;
                 }
             }
         }
