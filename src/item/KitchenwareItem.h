@@ -8,9 +8,9 @@
  * Represents a kitchenware item.
 */
 class KitchenwareItem : public Item {
+  protected:
     string material;
 
-  protected:
     /**
      * Returns an output of this `KitchenwareItem` to the console.
     */
