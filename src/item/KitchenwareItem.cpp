@@ -43,9 +43,9 @@ KitchenwareItem *KitchenwareItem::deepClone() const {
 }
 
 string KitchenwareItem::outputToConsole() const {
-    ostringstream os(Item::outputToConsole());
+    ostringstream os;
 
-    os << "Material: " << material << endl;
+    os << Item::outputToConsole() << "Material: " << material << endl;
 
     return os.str();
 }

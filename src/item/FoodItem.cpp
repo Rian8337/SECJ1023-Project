@@ -37,10 +37,10 @@ void FoodItem::setCalories(float calories) {
 }
 
 string FoodItem::outputToConsole() const {
-    ostringstream os(Item::outputToConsole());
+    ostringstream os;
 
-    os << "Calories: " << setprecision(2) << fixed << calories << "kcal"
-       << endl;
+    os << Item::outputToConsole() << "Calories: " << setprecision(2) << fixed
+       << calories << "kcal" << endl;
 
     return os.str();
 }
