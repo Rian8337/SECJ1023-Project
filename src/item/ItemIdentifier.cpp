@@ -2,6 +2,7 @@
 #include "ItemType.h"
 #include <iostream>
 #include <string>
+#include <utility>
 
 using namespace std;
 
@@ -29,17 +30,7 @@ ItemIdentifier::ItemIdentifier(const string &name, const string &description,
 
 ItemIdentifier::ItemIdentifier(const ItemIdentifier &copy) { *this = copy; }
 
-ItemIdentifier::ItemIdentifier(ItemIdentifier &&other) {
-    id = other.id;
-    name = other.name;
-    description = other.description;
-    type = other.type;
-
-    other.id = 0;
-    other.name = "";
-    other.description = "";
-    other.type = ItemType::none;
-}
+ItemIdentifier::ItemIdentifier(ItemIdentifier &&other) { *this = move(other); }
 
 size_t ItemIdentifier::getID() const { return id; }
 void ItemIdentifier::setID(size_t id) { this->id = id; }
