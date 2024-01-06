@@ -10,9 +10,9 @@
  * Represents a food item.
 */
 class FoodItem : public Item {
+  protected:
     float calories;
 
-  protected:
     /**
      * Returns an output of this `FoodItem` to the console.
     */
