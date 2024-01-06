@@ -36,7 +36,7 @@ string itemTypeToString(const ItemType &itemType) {
     case ItemType::kitchenware:
         return "Kitchenware";
     case ItemType::softDrinks:
-        return "Soft Drinks";
+        return "Soft Drink";
     case ItemType::breakfastSpread:
         return "Breakfast Spread";
     case ItemType::noodles:
