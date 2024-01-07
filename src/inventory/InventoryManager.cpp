@@ -251,10 +251,12 @@ InventoryManager::searchItems(const InventorySearchQuery &query) {
         if (!query.getItemTypes().empty()) {
             insert = false;
 
-            for (size_t j = 0; j < query.getItemTypes().size() && !insert;
-                 ++j) {
-                if (query.getItemTypes()[j] ==
-                    item->getIdentifier()->getType()) {
+            for (const ItemType &type : query.getItemTypes()) {
+                if (insert) {
+                    break;
+                }
+
+                if (type == item->getIdentifier()->getType()) {
                     insert = true;
                 }
             }
