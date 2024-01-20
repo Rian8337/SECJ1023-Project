@@ -273,7 +273,14 @@ InventoryManager::searchItems(const InventorySearchQuery &query) {
 }
 
 bool InventoryManager::loadBackup(const InventoryBackup &backup) {
-    for (Item *item : backup.getItems()) {
+    // Delete current items first.
+    for (const Item *item : items) {
+        delete item;
+    }
+
+    items.clear();
+
+    for (const Item *item : backup.getItems()) {
         addItem(item->deepClone());
     }
 
