@@ -263,7 +263,7 @@ InventoryManager::searchItems(const InventorySearchQuery &query) {
         }
 
         if (insert) {
-            items.append(item);
+            items.append(item->deepClone());
         }
     }
 
