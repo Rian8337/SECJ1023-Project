@@ -10,7 +10,7 @@ To compile the program, simply use the suitable build task or run the following 
 
 -   Windows
 
-    ```ps
+    ```powershell
     g++ -fdiagnostics-color=always -std=c++11 -g $((Get-ChildItem -Filter "*.cpp" -Path "./src" -Recurse).FullName)
     ```
 
