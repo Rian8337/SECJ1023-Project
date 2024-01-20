@@ -62,6 +62,8 @@ void KitchenwareItem::inputData() {
             cout << "Material cannot be empty." << endl;
             continue;
         }
+
+        break;
     }
 }
 
