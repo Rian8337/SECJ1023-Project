@@ -7,6 +7,8 @@ using namespace std;
 
 ItemSortMethod parseSortMethod(short num) {
     switch (num) {
+    case ItemSortMethod::sortById:
+        return ItemSortMethod::sortById;
     case ItemSortMethod::sortByName:
         return ItemSortMethod::sortByName;
     case ItemSortMethod::sortByPriceSmallestToHighest:
